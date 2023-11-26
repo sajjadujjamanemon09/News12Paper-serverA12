@@ -28,7 +28,7 @@ async function run() {
 
 
     const articleCollection = client.db("newsPaper").collection("title");
-    const publisherCollection = client.db("newsPaper").collection("publisher");
+
 
 
         // tittle related apis
@@ -78,12 +78,8 @@ async function run() {
         // })
 
 
-        // publisher collection
-        app.post('/publisher', async (req, res) => {
-          const item = req.body;
-          const result = await publisherCollection.insertOne(item);
-          res.send(result);
-        });
+
+
 
 
 
