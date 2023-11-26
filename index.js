@@ -79,11 +79,11 @@ async function run() {
 
 
         // publisher collection
-        // app.post('/publisher', async (req, res) => {
-        //   const item = req.body;
-        //   const result = await publisherCollection.insertOne(item);
-        //   res.send(result);
-        // });
+        app.post('/publisher', async (req, res) => {
+          const item = req.body;
+          const result = await publisherCollection.insertOne(item);
+          res.send(result);
+        });
 
 
 
