@@ -41,12 +41,12 @@ async function run() {
       res.send(result);
     });
 
-    // app.delete("/title/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await articleCollection.deleteOne(query);
-    //   res.send(result);
-    // });
+    app.delete("/title/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await articleCollection.deleteOne(query);
+      res.send(result);
+    });
 
     app.patch("/title/premium/:id", async (req, res) => {
       const id = req.params.id;
