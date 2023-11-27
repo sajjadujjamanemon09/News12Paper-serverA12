@@ -49,20 +49,20 @@ async function run() {
       res.send(result);
     });
     // approve
-    // app.patch("/title/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const data = req.body;
+    app.patch("/title/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
 
-    //   const query = { _id: new ObjectId(id) };
+      const query = { _id: new ObjectId(id) };
 
-    //   const updateDoc = {
-    //     $set: {
-    //       status: data.status,
-    //     },
-    //   };
-    //   const result = await articleCollection.updateOne(query, updateDoc);
-    //   res.send(result);
-    // });
+      const updateDoc = {
+        $set: {
+          status: data.status,
+        },
+      };
+      const result = await articleCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
 
     // decline
     app.post("/declineMessage", async (req, res) => {
