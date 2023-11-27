@@ -28,6 +28,7 @@ async function run() {
     const articleCollection = client.db("newsPaper").collection("title");
     const publisherCollection = client.db("newsPaper").collection("publisher");
     const userCollection = client.db("newsPaper").collection("user");
+    const declineCollection = client.db("newsPaper").collection("declineMessage");
 
     // tittle related apis
     app.post("/title", async (req, res) => {
@@ -47,6 +48,33 @@ async function run() {
       const result = await articleCollection.deleteOne(query);
       res.send(result);
     });
+    // approve
+    // app.patch("/title/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const data = req.body;
+
+    //   const query = { _id: new ObjectId(id) };
+
+    //   const updateDoc = {
+    //     $set: {
+    //       status: data.status,
+    //     },
+    //   };
+    //   const result = await articleCollection.updateOne(query, updateDoc);
+    //   res.send(result);
+    // });
+
+    // decline
+    app.post("/declineMessage", async (req, res) => {
+      const article = req.body;
+      const result = await declineCollection.insertOne(article);
+      res.send(result);
+    });
+
+    app.get("/declineMessage", async (req, res) => {
+      const result = await declineCollection.find().toArray();
+      res.send(result);
+    });
 
     app.patch("/title/premium/:id", async (req, res) => {
       const id = req.params.id;
@@ -59,31 +87,6 @@ async function run() {
       const result = await articleCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
-
-    // app.get('/title/:id', async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) }
-    //   const result = await articleCollection.findOne(query);
-    //   res.send(result);
-    // })
-
-    // app.patch('/title/:id', async (req, res) => {
-    //   const item = req.body;
-    //   const id = req.params.id;
-    //   const filter = { _id: new ObjectId(id) }
-    //   const updatedDoc = {
-    //     $set: {
-    //       name: item.name,
-    //       category: item.category,
-    //       price: item.price,
-    //       recipe: item.recipe,
-    //       image: item.image
-    //     }
-    //   }
-
-    //   const result = await articleCollection.updateOne(filter, updatedDoc)
-    //   res.send(result);
-    // })
 
     // publisher API
     app.post("/publisher", async (req, res) => {
