@@ -79,13 +79,13 @@ async function run() {
       const result = await articleCollection.find(query).toArray();
       res.send(result);
     });
-  //  // my article route delete
-  //   app.delete("/title/myArticles/:id", async (req, res) => {
-  //     const id = req.params.id;
-  //     const query = { _id: new ObjectId(id) };
-  //     const result = await articleCollection.deleteOne(query);
-  //     res.send(result);
-  //   });
+   // my article route delete
+    app.delete("/title/myArticles/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await articleCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // decline
     app.post("/declineMessage", async (req, res) => {
