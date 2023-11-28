@@ -28,7 +28,9 @@ async function run() {
     const articleCollection = client.db("newsPaper").collection("title");
     const publisherCollection = client.db("newsPaper").collection("publisher");
     const userCollection = client.db("newsPaper").collection("user");
-    const declineCollection = client.db("newsPaper").collection("declineMessage");
+    const declineCollection = client
+      .db("newsPaper")
+      .collection("declineMessage");
 
     // tittle related apis
     app.post("/title", async (req, res) => {
@@ -56,7 +58,7 @@ async function run() {
       res.send(result);
     });
 
-// approve patch
+    // approve patch
     app.patch("/title/:id", async (req, res) => {
       const id = req.params.id;
       const data = req.body;
@@ -79,11 +81,43 @@ async function run() {
       const result = await articleCollection.find(query).toArray();
       res.send(result);
     });
-   // my article route delete
+    // my article route delete
     app.delete("/title/myArticles/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await articleCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // // get view details
+    // app.get('/title/viewDetails/:id',async(req,res) =>{
+    //   const id = req.params.id 
+    //   const query = {_id :new ObjectId(id)}
+    //   const result = await articleCollection.findOne(query)
+    //   res.send(result)
+    // })
+    // // 
+    // app.get('/title/update/:id',async(req,res) =>{
+    //   const id = req.params.id 
+    //   const query = {_id :new ObjectId(id)}
+    //   const result = await articleCollection.findOne(query)
+    //   res.send(result)
+    // })
+    // my article update
+    app.patch("/title/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          title: data.title,
+          image: data.image,
+          publisher: data.publisher,
+          tag: data.tag,
+          description: data.description,
+        },
+      };
+      const result = await articleCollection.updateOne(query, updateDoc);
       res.send(result);
     });
 
