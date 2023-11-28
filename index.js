@@ -134,6 +134,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/premiumPlan", async (req, res) => {
+      const quality = req.query.quality;
+      const query = { quality: quality };
+      const result = await articleCollection.find(query).toArray();
+      console.log(result);
+      res.send(result);
+    });
+
     app.patch("/title/premium/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
