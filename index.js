@@ -49,6 +49,14 @@ async function run() {
       res.send(result);
     });
     // approve
+
+    app.get("/title/approve", async (req, res) => {
+      const query = { status: "approve" };
+      const result = await articleCollection.find(query).toArray();
+      res.send(result);
+    });
+
+// approve patch
     app.patch("/title/:id", async (req, res) => {
       const id = req.params.id;
       const data = req.body;
@@ -63,6 +71,21 @@ async function run() {
       const result = await articleCollection.updateOne(query, updateDoc);
       res.send(result);
     });
+
+    // my article route
+    app.get("/title/myArticles", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await articleCollection.find(query).toArray();
+      res.send(result);
+    });
+  //  // my article route delete
+  //   app.delete("/title/myArticles/:id", async (req, res) => {
+  //     const id = req.params.id;
+  //     const query = { _id: new ObjectId(id) };
+  //     const result = await articleCollection.deleteOne(query);
+  //     res.send(result);
+  //   });
 
     // decline
     app.post("/declineMessage", async (req, res) => {
