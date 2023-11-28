@@ -97,12 +97,12 @@ async function run() {
     //   res.send(result)
     // })
     // // 
-    // app.get('/title/update/:id',async(req,res) =>{
-    //   const id = req.params.id 
-    //   const query = {_id :new ObjectId(id)}
-    //   const result = await articleCollection.findOne(query)
-    //   res.send(result)
-    // })
+    app.get('/title/update/:id',async(req,res) =>{
+      const id = req.params.id 
+      const query = {_id :new ObjectId(id)}
+      const result = await articleCollection.findOne(query)
+      res.send(result)
+    })
     // my article update
     app.patch("/title/update/:id", async (req, res) => {
       const id = req.params.id;
