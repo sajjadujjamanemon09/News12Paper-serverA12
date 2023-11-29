@@ -213,19 +213,19 @@ async function run() {
     });
 
     // payment
-    // app.post("/create-payment-intent", async (req, res) => {
-    //   const { price } = req.body;
+    app.post("/create-payment-intent", async (req, res) => {
+      const { price } = req.body;
 
-    //   const paymentIntent = await stripe.paymentIntents.create({
-    //     amount: price * 100,
-    //     currency: "usd",
-    //     payment_method_types: ["card"],
-    //   });
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: price * 100,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
 
-    //   res.send({
-    //     clientSecret: paymentIntent.client_secret,
-    //   });
-    // });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
 
     app.patch("/user/:email", async (req, res) => {
       const email = req.params.email;
