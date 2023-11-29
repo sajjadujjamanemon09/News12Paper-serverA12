@@ -5,9 +5,17 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.PAY_KEY);
 const app = express();
 const port = process.env.PORT || 5000;
+const jwt = require('jsonwebtoken')
 
 // middleware
-app.use(cors());
+app.use(cors({
+  credentials:true,
+  origin:[
+    'https://assignment-12-c8954.web.app',
+    'https://assignment-12-c8954.firebaseapp.com',
+    'http://localhost:5173'
+  ]
+}));
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.hepooac.mongodb.net/?retryWrites=true&w=majority`;
@@ -20,6 +28,25 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+
+const verifyToken = async (req, res, next) => {
+  // console.log("inside verify token", req.headers);
+
+  if (!req.headers.authorization) {
+    return res.status(401).send({ message: "forbidden access" });
+  }
+  const token = req.headers.authorization.split(" ")[1];
+
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "forbidden access" });
+    }
+    req.decoded = decoded;
+    next();
+  });
+};
+
 
 async function run() {
   try {
@@ -91,20 +118,20 @@ async function run() {
     });
 
     // // get view details
-    app.get('/title/viewDetails/:id',async(req,res) =>{
-      const id = req.params.id 
-      const query = {_id :new ObjectId(id)}
-      const result = await articleCollection.findOne(query)
-      res.send(result)
-    })
-    
-    // 
-    app.get('/title/update/:id',async(req,res) =>{
-      const id = req.params.id 
-      const query = {_id :new ObjectId(id)}
-      const result = await articleCollection.findOne(query)
-      res.send(result)
-    })
+    app.get("/title/viewDetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await articleCollection.findOne(query);
+      res.send(result);
+    });
+
+    //
+    app.get("/title/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await articleCollection.findOne(query);
+      res.send(result);
+    });
     // my article update
     app.patch("/title/update/:id", async (req, res) => {
       const id = req.params.id;
@@ -135,7 +162,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/premiumPlan", async (req, res) => {
+    app.get("/premiumPlan",verifyToken, async (req, res) => {
       const quality = req.query.quality;
       const query = { quality: quality };
       const result = await articleCollection.find(query).toArray();
@@ -242,13 +269,20 @@ async function run() {
       res.send(result);
     });
 
-
     app.get("/user/premiumPlan/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await userCollection.findOne(query);
       res.send(result);
     });
+
+    // app.post("/jwt", async (req, res) => {
+    //   const user = req.body;
+    //   const token = jwt.sign(user, process.env.ACCESS_TOKEN, {
+    //     expiresIn: "250h",
+    //   });
+    //   res.send({ token });
+    // });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
